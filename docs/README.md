@@ -1,9 +1,14 @@
+# Project records
 
-# ilab-template-python-data-science/docs directory
+Complete these records in each new client repository. Use `Not applicable` with a
+reason for irrelevant fields and `Unresolved` with an owner for unknown decisions.
+Never put credentials or confidential client details in a publicly visible record.
+Link to an access-controlled record when needed.
 
-Template for python projects tailored to scientific applications (e.g., machine learning) - docs directory
+- [Template setup](template-setup.md): convert the starter into a client repository.
+- [Project brief](project-brief.md): scope, responsibilities, and acceptance criteria.
+- [Deployment runbook](deployment.md): repeatable release, verification, and recovery.
+- [Handoff](handoff.md): evidence and responsibilities for the receiving team.
 
-## Objectives
-
-- Directory for application documentation and supporting references
-
+Template maintainers: see [template release](template-release.md) for distributing
+this starter. Remove that maintainer-only document from client copies.

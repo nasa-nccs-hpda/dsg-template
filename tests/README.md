@@ -1,9 +1,5 @@
+# Tests
 
-# ilab-template-python-data-science/tests directory
-
-Template for python projects tailored to scientific applications (e.g., machine learning) - tests directory
-
-## Objectives
-
-- Directory for application and unit tests
-
+Run `python -m unittest discover -s tests -v` after installing the package.
+Tests exercise the installed application and CLI with synthetic temporary data.
+Replace or extend them when the starter is adapted to the client's requirements.

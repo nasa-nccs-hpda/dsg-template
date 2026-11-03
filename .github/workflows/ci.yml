@@ -1,36 +1,43 @@
-name: CI Regression
+name: CI
 
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-
   test:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 4
       matrix:
-        # 3.6 will reach EoL in December 2021
-        # https://devguide.python.org/#status-of-python-branches
-        python-version: [ "3.10", "3.12" ]
+        python-version: ["3.11", "3.12", "3.13"]
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup python
-        uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          architecture: x64
-      - name: Install test dependencies
+      - name: Install package
+        run: python -m pip install .
+      - name: Test installed package
+        run: python -m unittest discover -s tests -v
+      - name: Smoke test CLI
+        run: dsg-project examples/sample.csv
+
+  container:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Build container
+        run: docker build -t dsg-project:ci .
+      - name: Smoke test container with synthetic data
         run: |
-          sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable
-          sudo apt-get update
-          sudo apt-get install -y gdal-bin libgdal-dev build-essential
-          python -m pip install --upgrade pip
-          pip install https://github.com/rasterio/rasterio/archive/master.zip
-          pip install coveralls pytest
-      - name: Run tests
-        run: coverage run -m pytest -v
-      - name: Submit coveralls
-        if: github.event_name != 'pull_request'
-        run: coveralls --service=github
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          result=$(docker run --rm --mount type=bind,source="$PWD/examples",target=/data,readonly dsg-project:ci /data/sample.csv)
+          test "$result" = '{"columns": ["name", "value"], "rows": 2}'

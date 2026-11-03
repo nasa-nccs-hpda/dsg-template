@@ -129,3 +129,10 @@ dmypy.json
 # Pyre type checker
 .pyre/
 /venv/
+
+# Client data and local credentials
+.env.*
+!.env.example
+data/
+*.pem
+*.key
