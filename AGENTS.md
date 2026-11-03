@@ -20,7 +20,9 @@ Routine implementation changes do not require running every workflow.
 - Follow the client's chosen stack and existing architecture. The Python CSV
   example is disposable; remove it when real application behavior replaces it.
 - Keep setup and test commands in README.md synchronized with CI. For this starter:
-  `python -m pip install -e .` and `python -m unittest discover -s tests -v`.
+  `uv sync --locked` and `uv run --locked python -m unittest discover -s tests -v`.
+- Use uv for dependencies and execution. Commit `uv.lock` with dependency or
+  project-name changes; regenerate it with `uv lock` rather than editing it by hand.
 - Add tests for meaningful changed behavior, including relevant failure paths.
   State exactly what ran and what could not be checked.
 - Keep real data, secrets, credentials, and customer identifiers out of fixtures,

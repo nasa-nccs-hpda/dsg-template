@@ -27,7 +27,7 @@ publication, release tag, or repository-setting change is performed by local tes
 ## ZIP delivery
 
 A source ZIP is also usable without the GitHub template setting. Include all
-maintained source, documentation, and hidden configuration/skill files; exclude
+maintained source, `uv.lock`, documentation, and hidden configuration/skill files; exclude
 `.git/`, virtual environments, caches, build outputs, and local data or secrets.
 A Python wheel alone is not a substitute: it omits the repository workflows and
 agent skills. Recipients should extract the ZIP, initialize Git if needed, and
@@ -35,9 +35,9 @@ follow README.md. Do not distribute a developer's entire working directory.
 
 ## Verify a candidate
 
-From a clean extracted copy and fresh Python environment, install the package,
-run `python -m unittest discover -s tests -v`, and run
-`dsg-project examples/sample.csv`. Expect two records and the columns `name` and
+From a clean extracted copy, run `uv sync --locked`,
+`uv run --locked python -m unittest discover -s tests -v`, and
+`uv run --locked dsg-project examples/sample.csv`. Expect two records and the columns `name` and
 `value`. Follow README.md for the container build and smoke test. Check that all
 three `.agents/skills/*/SKILL.md` files are present and linked from AGENTS.md.
 

@@ -13,7 +13,8 @@ production. Link to the authorization or agreed release process.
 ## Build and configuration
 
 Record the source commit/tag, artifact name and immutable version/digest, supported
-runtime, dependency lockfile or constraints, and exact build command. For this
+runtime, committed `uv.lock`, and exact build command. Use `uv sync --locked`
+for installation and `uv run --locked` for project commands. For this
 starter the local build is `docker build -t dsg-project:local .`.
 
 List required variable names, purpose, secret-store locations, and the identity that

@@ -21,22 +21,30 @@ accounts, and publishing destinations are deliberately configured per project.
 
 This is the Python starter, not a universal application scaffold. The project
 records and agent skills can also be reused with another stack; replace `src/`,
-`tests/`, `pyproject.toml`, `Dockerfile`, and CI together in that case. Add `infra/`
+`tests/`, `pyproject.toml`, `uv.lock`, `.python-version`, `Dockerfile`, and CI together in that case. Add `infra/`
 or `deploy/` only when there is actual infrastructure or deployment code to maintain.
 
 ## Run locally
 
-CI covers Python 3.11, 3.12, and 3.13. Package installation needs access to a Python
-package index for the build backend. The sample has no third-party runtime dependencies. From the repository root:
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/) first.
+Python 3.12 is the default in `.python-version`; CI also checks 3.11 and 3.13.
+uv manages the project environment and can download Python when needed. Initial
+setup needs network access for Python and build dependencies. From the repository root:
 
 ```bash
-python3 -m venv .venv
-source .venv/bin/activate
-# Windows PowerShell: .venv\Scripts\Activate.ps1
-python -m pip install -e .
-dsg-project examples/sample.csv
-python -m unittest discover -s tests -v
+uv sync --locked
+uv run --locked dsg-project examples/sample.csv
+uv run --locked python -m unittest discover -s tests -v
 ```
+
+No manual environment creation or activation is needed. Commit `uv.lock` alongside
+`pyproject.toml`. Use `uv add <package>` for runtime dependencies and
+`uv add --dev <package>` for development tools. After renaming the project or
+editing dependencies directly, run `uv lock` and commit the updated lockfile.
+Use `uv lock --upgrade` for an intentional dependency refresh, then rerun tests.
+CI and container builds use `--locked` so stale lockfiles fail instead of changing.
+The lockfile tracks project dependencies; the build backend and Python base image
+have separate version constraints and are not fully pinned by `uv.lock`.
 
 The sample returns `{"columns": ["name", "value"], "rows": 2}`. It reads UTF-8 CSV,
 checks header names and record widths, and outputs metadata without row values.

@@ -8,7 +8,8 @@
 - [ ] Replace the CSV example and fixtures with real application behavior and synthetic tests. Add data/notebook folders only if needed.
 - [ ] For another stack, replace Python packaging, application, tests, container, and CI together; update AGENTS.md commands.
 - [ ] Document actual configuration names in `.env.example` and how configuration is loaded.
-- [ ] Choose supported runtime versions and record the dependency locking/update process. The starter has no third-party runtime dependencies; its build backend and container base are not locked.
+- [ ] Keep `uv.lock` committed. Run `uv lock` after renaming the project; use `uv add` for dependencies and `uv lock --upgrade` for reviewed updates.
+- [ ] Choose supported Python versions in `.python-version`, pyproject.toml, Dockerfile, and CI. Keep the uv version in CI and Dockerfile aligned when updating tooling. The build backend and container base require separate production pinning decisions.
 - [ ] Configure maintainer access, reviewers/branch protection, and security reporting contact. Add CODEOWNERS only with real team/user handles.
 - [ ] Verify a fresh environment can install, run tests, and build the artifact.
 - [ ] Complete the deployment runbook before enabling publishing or deployment automation.
